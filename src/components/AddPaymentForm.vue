@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <input placeholder="Payment value" v-model="value" />
+    <input type="number" placeholder="Payment value" v-model.number="value" />
     <input placeholder="Payment category" v-model="category" />
     <input placeholder="Payment date" v-model="date" />
     <button @click="addNewPayment" class="btn">ADD +</button>

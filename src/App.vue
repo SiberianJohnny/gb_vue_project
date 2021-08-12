@@ -6,15 +6,22 @@
       <add-payment-form @addNewPayment="newPayment" v-if="show" />
     </header>
     <main>
-      <PaymentDisplay :list="paymentsList" />
+      Total Value: {{ getFPV }}
+      <PaymentDisplay :list="currentElement" />
     </main>
     <footer>
-      <pagination />
+      <pagination
+        :cur="page"
+        :n="n"
+        :length="paymentsList.length"
+        @changePage="onChangePage"
+      />
     </footer>
   </div>
 </template>
 
 <script>
+import { mapMutations, mapGetters } from "vuex";
 import AddPaymentForm from "./components/AddPaymentForm.vue";
 import Button from "./components/Button.vue";
 import Pagination from "./components/Pagination.vue";
@@ -30,11 +37,13 @@ export default {
   },
   data() {
     return {
-      paymentsList: [],
       show: false,
+      page: 1,
+      n: 5,
     };
   },
   methods: {
+    ...mapMutations(["setPaymentsListData", "addDataToPaymentsList"]),
     fetchData() {
       return [
         {
@@ -84,15 +93,33 @@ export default {
         },
       ];
     },
+
+    onChangePage(p) {
+      this.page = p;
+    },
     newPayment(paymentData) {
-      this.paymentsList.push(paymentData);
+      this.addDataToPaymentsList(paymentData);
     },
     showForm() {
       this.show = !this.show;
     },
   },
+  computed: {
+    ...mapGetters({
+      paymentsList: "getPaymentsList",
+    }),
+    getFPV() {
+      return this.$store.getters.getFullPaymentsValue;
+    },
+    currentElement() {
+      const { n, page } = this;
+      return this.paymentsList.slice(n * (page - 1), n * (page - 1) + n);
+    },
+  },
   created() {
-    this.paymentsList = this.fetchData();
+    // this.paymentsList = this.fetchData();
+    // this.#store.commit("setPaymentsListData", this.fetchData());
+    this.setPaymentsListData(this.fetchData());
   },
 };
 </script>

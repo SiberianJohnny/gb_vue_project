@@ -6,8 +6,8 @@
       <th>Category</th>
       <th>Value</th>
     </tr>
-    <tr v-for="(item, id) in list" :key="id">
-      <td>{{ id + 1 }}</td>
+    <tr v-for="item in list" :key="item.id">
+      <td>{{ item.id + 1 }}</td>
       <td>{{ item.date }}</td>
       <td class="category">{{ item.category }}</td>
       <td>{{ item.value }}</td>

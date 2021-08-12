@@ -4,6 +4,7 @@
       <h1 class="app__title">My personal costs</h1>
       <Button @showForm="showForm" />
       <add-payment-form @addNewPayment="newPayment" v-if="show" />
+      <add-categorie @addNewCategorie="newCategorie" v-if="show" />
     </header>
     <main>
       Total Value: {{ getFPV }}
@@ -21,7 +22,8 @@
 </template>
 
 <script>
-import { mapMutations, mapGetters } from "vuex";
+import { mapMutations, mapGetters, mapActions } from "vuex";
+import AddCategorie from "./components/AddCategorie.vue";
 import AddPaymentForm from "./components/AddPaymentForm.vue";
 import Button from "./components/Button.vue";
 import Pagination from "./components/Pagination.vue";
@@ -34,6 +36,7 @@ export default {
     AddPaymentForm,
     Button,
     Pagination,
+    AddCategorie,
   },
   data() {
     return {
@@ -43,67 +46,77 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setPaymentsListData", "addDataToPaymentsList"]),
-    fetchData() {
-      return [
-        {
-          date: "28.03.2020",
-          category: "Food",
-          value: 169,
-        },
-        {
-          date: "24.03.2020",
-          category: "Transport",
-          value: 360,
-        },
-        {
-          date: "24.03.2020",
-          category: "Food",
-          value: 532,
-        },
-        {
-          date: "28.03.2020",
-          category: "Food",
-          value: 169,
-        },
-        {
-          date: "24.03.2020",
-          category: "Transport",
-          value: 360,
-        },
-        {
-          date: "24.03.2020",
-          category: "Food",
-          value: 532,
-        },
-        {
-          date: "28.03.2020",
-          category: "Food",
-          value: 169,
-        },
-        {
-          date: "24.03.2020",
-          category: "Transport",
-          value: 360,
-        },
-        {
-          date: "24.03.2020",
-          category: "Food",
-          value: 532,
-        },
-      ];
-    },
-
+    ...mapMutations([
+      "setPaymentsListData",
+      "addDataToPaymentsList",
+      "addDataToCategoriesList",
+    ]),
+    ...mapActions({
+      fetchListData: "fetchData",
+    }),
+    // fetchData() {
+    //   return [
+    //     {
+    //       date: "28.03.2020",
+    //       category: "Food",
+    //       value: 169,
+    //     },
+    //     {
+    //       date: "24.03.2020",
+    //       category: "Transport",
+    //       value: 360,
+    //     },
+    //     {
+    //       date: "24.03.2020",
+    //       category: "Food",
+    //       value: 532,
+    //     },
+    //     {
+    //       date: "28.03.2020",
+    //       category: "Food",
+    //       value: 169,
+    //     },
+    //     {
+    //       date: "24.03.2020",
+    //       category: "Transport",
+    //       value: 360,
+    //     },
+    //     {
+    //       date: "24.03.2020",
+    //       category: "Food",
+    //       value: 532,
+    //     },
+    //     {
+    //       date: "28.03.2020",
+    //       category: "Food",
+    //       value: 169,
+    //     },
+    //     {
+    //       date: "24.03.2020",
+    //       category: "Transport",
+    //       value: 360,
+    //     },
+    //     {
+    //       date: "24.03.2020",
+    //       category: "Food",
+    //       value: 532,
+    //     },
+    //   ];
+    // },
     onChangePage(p) {
       this.page = p;
     },
     newPayment(paymentData) {
       this.addDataToPaymentsList(paymentData);
     },
+    newCategorie(categorieData) {
+      this.addDataToCategoriesList(categorieData);
+    },
     showForm() {
       this.show = !this.show;
     },
   },
+
   computed: {
     ...mapGetters({
       paymentsList: "getPaymentsList",
@@ -116,10 +129,12 @@ export default {
       return this.paymentsList.slice(n * (page - 1), n * (page - 1) + n);
     },
   },
+
   created() {
     // this.paymentsList = this.fetchData();
     // this.#store.commit("setPaymentsListData", this.fetchData());
-    this.setPaymentsListData(this.fetchData());
+    // this.setPaymentsListData(this.fetchData());
+    this.fetchListData();
   },
 };
 </script>

@@ -48,6 +48,17 @@ export default {
   },
   created() {
     this.fetchCategoryList();
+
+    const value = this.$route.query.value;
+    const category = this.$route.params.category;
+    if (value && category) {
+      this.value = value;
+      this.category = category;
+      this.addNewPayment();
+    } else {
+      this.category = category;
+      this.value = value;
+    }
   },
 };
 </script>

@@ -1,140 +1,40 @@
 <template>
   <div id="app">
     <header class="app__header">
-      <h1 class="app__title">My personal costs</h1>
-      <Button @showForm="showForm" />
-      <add-payment-form @addNewPayment="newPayment" v-if="show" />
-      <add-categorie @addNewCategorie="newCategorie" v-if="show" />
+      <div class="page-links">
+        <router-link to="/dashboard">Dashboard</router-link> /
+        <router-link to="/about">About</router-link>
+      </div>
+
+      <router-view />
+
+      <!-- <dashboard v-if="currentPage === dashboard" />           |Навигация без роутера|
+      <about v-if="currentPage === about" />
+      <page-404 v-if="currentPage === 404" /> -->
     </header>
-    <main>
-      Total Value: {{ getFPV }}
-      <PaymentDisplay :list="currentElement" />
-    </main>
-    <footer>
-      <pagination
-        :cur="page"
-        :n="n"
-        :length="paymentsList.length"
-        @changePage="onChangePage"
-      />
-    </footer>
   </div>
 </template>
 
 <script>
-import { mapMutations, mapGetters, mapActions } from "vuex";
-import AddCategorie from "./components/AddCategorie.vue";
-import AddPaymentForm from "./components/AddPaymentForm.vue";
-import Button from "./components/Button.vue";
-import Pagination from "./components/Pagination.vue";
-import PaymentDisplay from "./components/PaymentDisplay.vue";
-
 export default {
   name: "App",
-  components: {
-    PaymentDisplay,
-    AddPaymentForm,
-    Button,
-    Pagination,
-    AddCategorie,
-  },
-  data() {
-    return {
-      show: false,
-      page: 1,
-      n: 5,
-    };
-  },
+
   methods: {
-    ...mapMutations([
-      "setPaymentsListData",
-      "addDataToPaymentsList",
-      "addDataToCategoriesList",
-    ]),
-    ...mapActions({
-      fetchListData: "fetchData",
-    }),
-    // fetchData() {
-    //   return [
-    //     {
-    //       date: "28.03.2020",
-    //       category: "Food",
-    //       value: 169,
-    //     },
-    //     {
-    //       date: "24.03.2020",
-    //       category: "Transport",
-    //       value: 360,
-    //     },
-    //     {
-    //       date: "24.03.2020",
-    //       category: "Food",
-    //       value: 532,
-    //     },
-    //     {
-    //       date: "28.03.2020",
-    //       category: "Food",
-    //       value: 169,
-    //     },
-    //     {
-    //       date: "24.03.2020",
-    //       category: "Transport",
-    //       value: 360,
-    //     },
-    //     {
-    //       date: "24.03.2020",
-    //       category: "Food",
-    //       value: 532,
-    //     },
-    //     {
-    //       date: "28.03.2020",
-    //       category: "Food",
-    //       value: 169,
-    //     },
-    //     {
-    //       date: "24.03.2020",
-    //       category: "Transport",
-    //       value: 360,
-    //     },
-    //     {
-    //       date: "24.03.2020",
-    //       category: "Food",
-    //       value: 532,
-    //     },
-    //   ];
+    // setPage() {
+    //   this.page = location.pathname.slice(1);    |Навигация без роутера|
     // },
-    onChangePage(p) {
-      this.page = p;
-    },
-    newPayment(paymentData) {
-      this.addDataToPaymentsList(paymentData);
-    },
-    newCategorie(categorieData) {
-      this.addDataToCategoriesList(categorieData);
-    },
-    showForm() {
-      this.show = !this.show;
-    },
   },
 
-  computed: {
-    ...mapGetters({
-      paymentsList: "getPaymentsList",
-    }),
-    getFPV() {
-      return this.$store.getters.getFullPaymentsValue;
-    },
-    currentElement() {
-      const { n, page } = this;
-      return this.paymentsList.slice(n * (page - 1), n * (page - 1) + n);
-    },
-  },
-
-  created() {
-    // this.paymentsList = this.fetchData();
-    // this.#store.commit("setPaymentsListData", this.fetchData());
-    // this.setPaymentsListData(this.fetchData());
-    this.fetchListData();
+  mounted() {
+    // const links = document.querySelectorAll("a");
+    // links.forEach((link) => {
+    //   link.addEventListener("click", (event) => {    |Навигация без роутера|
+    //     event.preventDefault();
+    //     history.pushState({}, "", link.href);
+    //     this.setPage();
+    //   });
+    // });
+    // window.addEventListener("popstate", this.setPage);
   },
 };
 </script>

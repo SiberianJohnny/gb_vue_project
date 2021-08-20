@@ -1,9 +1,5 @@
 import Vue from "vue"
 import Router from 'vue-router'
-import Dashboard from '../pages/Dashboard'
-import About from '../pages/About'
-import Page404 from '../pages/Page404'
-import Login from '../pages/Login'
 
 Vue.use(Router)
 
@@ -12,47 +8,42 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      component: Dashboard,
-      name: 'Dashboard'
+      component: () => import(/* webpackChunkName:"Login" */'../pages/Login'),
+      name: 'Login'
     },
     {
       path: '/dashboard',
-      component: Dashboard,
+      component: () => import(/* webpackChunkName:"Dashboard" */'../pages/Dashboard'),
       name: 'Dashboard'
     },
     {
       path: '/dashboard/:page',
-      component: Dashboard,
+      component: () => import(/* webpackChunkName:"Dashboard" */'../pages/Dashboard'),
       name: 'Dashboard'
     },
     {
       path: '/:add/payment/:category',
-      component: Dashboard,
+      component: () => import(/* webpackChunkName:"Dashboard" */'../pages/Dashboard'),
       name: 'Dashboard'
     },
     {
       path: '/:add/payment/*',
-      component: Dashboard,
+      component: () => import(/* webpackChunkName:"Dashboard" */'../pages/Dashboard'),
       name: 'Dashboard'
     },
     {
       path: '/about*',
-      component: About,
+      component: () => import(/* webpackChunkName:"About" */'../pages/About'),
       name: 'About'
     },
     {
       path: '/404',
-      component: Page404,
+      component: () => import(/* webpackChunkName:"404" */'../pages/Page404'),
       name: '404'
     },
     {
-      path: '/auth*',
-      name: 'Login',
-      component: Login
-    },
-    {
       path: '*',
-      redirect: '/404'
+      component: () => import(/* webpackChunkName:"404" */'../pages/Page404'),
     }
   ]
 })

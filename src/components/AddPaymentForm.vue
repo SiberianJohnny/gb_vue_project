@@ -2,18 +2,16 @@
   <div class="wrapper">
     <input type="number" placeholder="Payment value" v-model.number="value" />
     <select v-model="category" v-if="options">
-      <option v-for="option in options" :value="option" :key="option">
+      <option v-for="(option, idx) in options" :value="option" :key="idx">
         {{ option }}
       </option>
     </select>
-    <!-- <input placeholder="Payment category" v-model="category" /> -->
     <input placeholder="Payment date" v-model="date" />
     <button @click="addNewPayment" class="btn">ADD +</button>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -23,7 +21,6 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["fetchCategoryList"]),
     addNewPayment() {
       const data = {
         date: this.date || this.getCurrentDate,
@@ -31,7 +28,7 @@ export default {
         value: +this.value,
         id: this.$store.state.paymentsList.length + 1,
       };
-      this.$emit("addNewPayment", data);
+      this.$store.commit("addDataToPaymentsList", data);
     },
   },
   computed: {
@@ -47,8 +44,6 @@ export default {
     },
   },
   created() {
-    this.fetchCategoryList();
-
     const value = this.$route.query.value;
     const category = this.$route.params.category;
     if (value && category) {

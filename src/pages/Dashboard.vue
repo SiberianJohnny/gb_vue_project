@@ -2,9 +2,12 @@
   <div>
     <header>
       <h1 class="app__title">My personal costs</h1>
-      <Button @showForm="showForm" />
-      <add-payment-form @addNewPayment="newPayment" v-if="show" />
-      <add-categorie @addNewCategorie="newCategorie" v-if="show" />
+      <button class="show-btn" @click="showPaymentForm">
+        Show Payment Form
+      </button>
+      <button class="show-btn" @click="showCategorieForm">
+        Show Categorie Form
+      </button>
     </header>
     <main>
       Total Value: {{ getFPV }}
@@ -21,9 +24,6 @@
 
 <script>
 import { mapMutations, mapGetters, mapActions } from "vuex";
-import AddCategorie from "../components/AddCategorie.vue";
-import AddPaymentForm from "../components/AddPaymentForm.vue";
-import Button from "../components/Button.vue";
 import Pagination from "../components/Pagination.vue";
 import PaymentDisplay from "../components/PaymentDisplay.vue";
 
@@ -31,15 +31,11 @@ export default {
   name: "Dashboard",
   components: {
     PaymentDisplay,
-    AddPaymentForm,
-    Button,
     Pagination,
-    AddCategorie,
   },
   data() {
     return {
       currentPage: "dashboard",
-      show: false,
       page: 1,
       n: 5,
     };
@@ -52,18 +48,16 @@ export default {
     ]),
     ...mapActions({
       fetchListData: "fetchData",
+      fetchCategoryData: "fetchCategoryList",
     }),
     onChangePage(p) {
       this.page = p;
     },
-    newPayment(paymentData) {
-      this.addDataToPaymentsList(paymentData);
+    showPaymentForm() {
+      this.$modal.show("addPaymentForm", { header: "Add payment Form" });
     },
-    newCategorie(categorieData) {
-      this.addDataToCategoriesList(categorieData);
-    },
-    showForm() {
-      this.show = !this.show;
+    showCategorieForm() {
+      this.$modal.show("addCategorie", { header: "Add category Form" });
     },
   },
 
@@ -81,13 +75,9 @@ export default {
   },
 
   async created() {
-    // this.paymentsList = this.fetchData();
-    // this.#store.commit("setPaymentsListData", this.fetchData());
-    // this.setPaymentsListData(this.fetchData());
     await this.fetchListData();
-    // this.$router.push({
-    //   name: "Dashboard",
-    // });
+    await this.fetchCategoryData();
+
     const paymentAddPath = this.$route.params.add;
     if (paymentAddPath === "add") {
       this.showForm();
@@ -102,4 +92,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.show-btn {
+  margin-bottom: 20px;
+}
 </style>

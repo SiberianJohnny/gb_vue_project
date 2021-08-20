@@ -1,6 +1,11 @@
 <template>
-  <div>
-    <input type="text" placeholder="Add Categorie" v-model="newCategorie" />
+  <div class="categorie__wrapper">
+    <input
+      class="categorie__input"
+      type="text"
+      placeholder="Add Categorie"
+      v-model="newCategorie"
+    />
     <button @click="addNewCategorie">Categorie +</button>
   </div>
 </template>
@@ -17,11 +22,14 @@ export default {
       const data = {
         newCategorie: this.newCategorie,
       };
-      this.$emit("addNewCategorie", data);
+      this.$store.commit("addDataToCategoriesList", data);
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
+.categorie__input {
+  margin-top: 10px;
+}
 </style>

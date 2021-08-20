@@ -1,40 +1,51 @@
 <template>
   <div id="app">
-    <header class="app__header">
+    <div class="app__header">
       <div class="page-links">
         <router-link to="/dashboard">Dashboard</router-link> /
         <router-link to="/about">About</router-link>
       </div>
 
-      <router-view />
+      <ModalWindow
+        v-if="modalShow"
+        :modalWindowSettings="modalWindowSettings"
+      />
 
-      <!-- <dashboard v-if="currentPage === dashboard" />           |Навигация без роутера|
-      <about v-if="currentPage === about" />
-      <page-404 v-if="currentPage === 404" /> -->
-    </header>
+      <router-view />
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: "App",
-
+  components: {
+    ModalWindow: () => import("./components/ModalWindow.vue"),
+  },
+  data() {
+    return {
+      modalShow: false,
+      modalWindowSettings: {},
+    };
+  },
   methods: {
-    // setPage() {
-    //   this.page = location.pathname.slice(1);    |Навигация без роутера|
-    // },
+    onModalOpen(settings) {
+      this.modalWindowSettings = settings;
+      this.modalShow = true;
+    },
+    onModalClose() {
+      this.modalWindowSettings = {};
+      this.modalShow = false;
+    },
   },
 
   mounted() {
-    // const links = document.querySelectorAll("a");
-    // links.forEach((link) => {
-    //   link.addEventListener("click", (event) => {    |Навигация без роутера|
-    //     event.preventDefault();
-    //     history.pushState({}, "", link.href);
-    //     this.setPage();
-    //   });
-    // });
-    // window.addEventListener("popstate", this.setPage);
+    this.$modal.EventBus.$on("show", this.onModalOpen);
+    this.$modal.EventBus.$on("hide", this.onModalClose);
+  },
+  beforeDestroy() {
+    this.$modal.EventBus.$off("show", this.onModalOpen);
+    this.$modal.EventBus.$off("hide", this.onModalClose);
   },
 };
 </script>

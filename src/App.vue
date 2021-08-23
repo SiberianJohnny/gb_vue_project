@@ -3,7 +3,8 @@
     <div class="app__header">
       <div class="page-links">
         <router-link to="/dashboard">Dashboard</router-link> /
-        <router-link to="/about">About</router-link>
+        <router-link to="/about">About</router-link> /
+        <router-link to="/calc">Calculator</router-link>
       </div>
 
       <ModalWindow

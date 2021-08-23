@@ -37,6 +37,11 @@ const router = new Router({
       name: 'About'
     },
     {
+      path: '/calc*',
+      component: () => import(/* webpackChunkName:"Calculator" */'../pages/Calc'),
+      name: 'Calculator'
+    },
+    {
       path: '/404',
       component: () => import(/* webpackChunkName:"404" */'../pages/Page404'),
       name: '404'

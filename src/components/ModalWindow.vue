@@ -1,23 +1,24 @@
 <template>
-  <div class="modal__wrapper">
+  <div class="modal__wrapper text-h5">
     <div class="modal__header">{{ modalWindowSettings.header }}</div>
     <div class="modal__main">
       <component :is="modalWindowSettings.name" />
     </div>
     <div class="modal__footer">
-      <button class="close-btn" @click="$modal.hide()">Close Form</button>
+      <v-btn class="close-btn mt-2" @click="$modal.hide()">Close Form</v-btn>
     </div>
   </div>
 </template>
 
 <script>
 import AddPaymentForm from "./AddPaymentForm.vue";
-import AddCategorie from "../components/AddCategorie.vue";
+import AddCategorie from "./AddCategorie.vue";
 import Authentication from "./Authentication.vue";
+import AddChangesForm from "./AddChangesForm.vue";
 
 export default {
   name: "ModalWindow",
-  components: { AddPaymentForm, Authentication, AddCategorie },
+  components: { AddPaymentForm, Authentication, AddCategorie, AddChangesForm },
   props: {
     modalWindowSettings: Object,
   },
@@ -26,12 +27,4 @@ export default {
 </script>
 
 <style scoped>
-.modal__wrapper {
-  background: lightblue;
-  padding: 20px;
-  margin-top: 20px;
-}
-.close-btn {
-  margin-top: 10px;
-}
 </style>

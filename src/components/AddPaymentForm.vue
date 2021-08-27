@@ -1,13 +1,15 @@
 <template>
   <div class="wrapper">
-    <input type="number" placeholder="Payment value" v-model.number="value" />
-    <select v-model="category" v-if="options">
-      <option v-for="(option, idx) in options" :value="option" :key="idx">
+    <v-text-field type="number" v-model.number="value" label="Value" />
+    <v-select v-model="category" :items="options" label="Category">
+      <!-- <option v-for="(option, idx) in options" :value="option" :key="idx">
         {{ option }}
-      </option>
-    </select>
-    <input placeholder="Payment date" v-model="date" />
-    <button @click="addNewPayment" class="btn">ADD +</button>
+      </option> -->
+    </v-select>
+    <v-text-field v-model="date" label="Date" />
+    <v-btn color="teal" dark @click="addNewPayment" class="btn">
+      ADD <v-icon>mdi-plus</v-icon>
+    </v-btn>
   </div>
 </template>
 
@@ -29,6 +31,7 @@ export default {
         id: this.$store.state.paymentsList.length + 1,
       };
       this.$store.commit("addDataToPaymentsList", data);
+      this.$modal.hide();
     },
   },
   computed: {

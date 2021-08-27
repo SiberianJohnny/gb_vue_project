@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     paymentsList: [],
     categories: [],
+    rowToChange: ''
   },
 
   mutations: {
@@ -16,6 +17,11 @@ export default new Vuex.Store({
     addDataToPaymentsList(state, payload) {
       state.paymentsList.push(payload)
     },
+
+    setCurrentRow(state, payload) {
+      state.rowToChange += payload
+    },
+
     addChangesToPaymentsList(state, payload) {
       state.paymentsList[payload.id].value = payload.value
       state.paymentsList[payload.id].category = payload.category
@@ -27,6 +33,7 @@ export default new Vuex.Store({
         state.paymentsList[i].id = i + 1
       }
     },
+
     setCategoriesListData(state, payload) {
       state.categories = payload
     },
@@ -62,7 +69,7 @@ export default new Vuex.Store({
             })
           }
           resolve(items)
-        }, 2000);
+        }, 100);
       })
         .then(res => commit('setPaymentsListData', res))
     },

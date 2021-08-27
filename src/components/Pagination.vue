@@ -1,6 +1,8 @@
 <template>
   <div class="pagination">
-    <div class="pagination__element" @click="changePage(cur - 1)">Prev</div>
+    <div class="pagination__element" @click="changePage(cur - 1)">
+      <v-icon>mdi-chevron-left</v-icon>
+    </div>
     <div
       class="pagination__element"
       v-for="page in amount"
@@ -9,7 +11,9 @@
     >
       {{ page }}
     </div>
-    <div class="pagination__element" @click="changePage(cur + 1)">Next</div>
+    <div class="pagination__element" @click="changePage(cur + 1)">
+      <v-icon>mdi-chevron-right</v-icon>
+    </div>
   </div>
 </template>
 

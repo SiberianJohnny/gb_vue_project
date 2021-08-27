@@ -1,40 +1,31 @@
 <template>
-  <table>
-    <tr>
-      <th>#</th>
-      <th>Date</th>
-      <th>Category</th>
-      <th>Value</th>
-    </tr>
-    <tr class="table__row" v-for="item in list" :key="item.id" :id="item.id">
-      <td>{{ item.id }}</td>
-      <td>{{ item.date }}</td>
-      <td class="category">{{ item.category }}</td>
-      <td>{{ item.value }}</td>
-      <td class="table__editor-cell">
-        <button :id="item.id" @click="showEditor(item.id)">Change</button>
-        <transition name="fade">
-          <editor
-            :id="item.id"
-            v-if="editorShow && item.id === editorRowNumber"
-          />
-        </transition>
-      </td>
-    </tr>
-  </table>
+  <v-container>
+    <v-row>
+      <v-col :cols="1">#</v-col>
+      <v-col :cols="3">Date</v-col>
+      <v-col :cols="5">Category</v-col>
+      <v-col :cols="2">Value</v-col>
+    </v-row>
+    <v-row class="table__row" v-for="item in list" :key="item.id" :id="item.id">
+      <v-col :cols="1">{{ item.id }}</v-col>
+      <v-col :cols="3">{{ item.date }}</v-col>
+      <v-col :cols="5" class="category">{{ item.category }}</v-col>
+      <v-col :cols="2">{{ item.value }}</v-col>
+      <v-col :cols="1" class="table__editor-cell">
+        <button :id="item.id" @click="showEditor($event, item)">
+          <v-icon>mdi-dots-vertical</v-icon>
+        </button>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import Editor from "./Editor.vue";
-
 export default {
   name: "PaymentDisplay",
-  components: {
-    Editor,
-  },
+  components: {},
   data() {
     return {
-      editorShow: false,
       editorRowNumber: "",
     };
   },
@@ -45,34 +36,34 @@ export default {
     },
   },
   methods: {
-    showEditor(id) {
-      this.$editor.showEditor(id);
+    showEditor(event, item) {
+      const id = item.id;
+      const items = [
+        {
+          icon: "mdi-pencil-outline",
+          text: "Edit",
+          action: () => {
+            this.$modal.show("addChangesForm", {
+              header: "Edit payment № " + item.id,
+            });
+          },
+        },
+        {
+          icon: "mdi-delete",
+          text: "Delete",
+          action: () => {
+            this.$store.commit("removeDataFromPaymentsList", id - 1);
+          },
+        },
+      ];
+      this.$store.commit("setCurrentRow", id);
+      this.$editor.showEditor({ event, items });
     },
-    onEditor(id) {
-      this.editorShow = !this.editorShow;
-      this.editorRowNumber = id;
-    },
-    onDeleteRow(rowID) {
-      this.$store.commit("removeDataFromPaymentsList", rowID - 1);
-      this.editorShow = false;
-    },
-  },
-  mounted() {
-    this.$editor.EventBus.$on("showEditor", this.onEditor);
-    this.$editor.EventBus.$on("deleteRow", this.onDeleteRow);
-  },
-  beforeDestroy() {
-    this.$editor.EventBus.$off("showEditor", this.onEditor);
-    this.$editor.EventBus.$off("deleteRow", this.onDeleteRow);
   },
 };
 </script>
 
 <style scoped>
-table {
-  margin: 25px auto 0;
-  width: 60%;
-}
 .table__editor-cell {
   position: relative;
 }

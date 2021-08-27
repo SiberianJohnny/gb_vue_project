@@ -1,12 +1,14 @@
 <template>
   <div class="categorie__wrapper">
-    <input
+    <v-text-field
       class="categorie__input"
       type="text"
-      placeholder="Add Categorie"
       v-model="newCategorie"
+      label="New Category"
     />
-    <button @click="addNewCategorie">Categorie +</button>
+    <v-btn color="teal" dark @click="addNewCategorie"
+      >Categorie <v-icon>mdi-plus</v-icon></v-btn
+    >
   </div>
 </template>
 
@@ -23,6 +25,7 @@ export default {
         newCategorie: this.newCategorie,
       };
       this.$store.commit("addDataToCategoriesList", data);
+      this.$modal.hide();
     },
   },
 };

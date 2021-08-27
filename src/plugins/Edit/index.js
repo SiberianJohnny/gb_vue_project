@@ -5,12 +5,24 @@ export default {
       return
     }
 
-    this.installed = true
+    this.installed = true;
+    this.caller = null;
 
     Vue.prototype.$editor = {
       EventBus: new Vue(),
-      showEditor(id) {
-        this.EventBus.$emit('showEditor', id)
+
+      showEditor({ event, items }) {
+        const caller = event.target
+        if (this.caller !== caller) {
+          this.caller = caller
+          this.EventBus.$emit('showEditor', { caller, items })
+        } else {
+          this.closeEditor()
+        }
+      },
+      closeEditor() {
+        this.EventBus.$emit('closeEditor')
+        this.caller = null
       },
       deleteRow(rowID) {
         this.EventBus.$emit('deleteRow', rowID)

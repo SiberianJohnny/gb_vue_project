@@ -44,13 +44,20 @@
           />
         </main>
       </v-col>
-      <v-col></v-col>
+      <v-col>
+        <chart
+          :chart-data="chartData"
+          :options="chartOptions"
+          chart:render
+        ></chart>
+      </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
 import { mapMutations, mapGetters, mapActions } from "vuex";
+import Chart from "../components/Chart";
 import ContextMenu from "../components/ContextMenu.vue";
 import ModalWindow from "../components/ModalWindow.vue";
 import Pagination from "../components/Pagination.vue";
@@ -63,6 +70,7 @@ export default {
     Pagination,
     ModalWindow,
     ContextMenu,
+    Chart,
   },
   data() {
     return {
@@ -71,6 +79,22 @@ export default {
       n: 5,
       dialog: false,
       modalWindowSettings: {},
+      chartData: {},
+      chartOptions: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: "top",
+          },
+          title: {
+            display: true,
+            text: "Costs by categories",
+          },
+        },
+      },
+      outcome: [],
+      chartCategories: [],
+      chartColors: [],
     };
   },
   methods: {
@@ -99,6 +123,32 @@ export default {
     onModalClose() {
       this.modalWindowSettings = {};
       this.dialog = false;
+    },
+    fillChartData() {
+      this.chartData = {
+        labels: this.chartCategories,
+        datasets: [
+          {
+            backgroundColor: this.chartColors,
+            data: this.outcome,
+          },
+        ],
+      };
+    },
+    getChartData() {
+      this.$store.state.categories.forEach((category) => {
+        let categoryOutcome = 0;
+        this.$store.state.paymentsList.forEach((item) => {
+          if (category === item.category) {
+            categoryOutcome += item.value;
+          }
+        });
+        this.outcome.push(categoryOutcome);
+        this.chartCategories.push(category);
+        this.chartColors.push(
+          "#" + (((1 << 24) * Math.random()) | 0).toString(16)
+        );
+      });
     },
   },
 
@@ -135,6 +185,9 @@ export default {
     if (page) {
       this.onChangePage(page);
     }
+
+    this.getChartData();
+    this.fillChartData();
   },
 };
 </script>

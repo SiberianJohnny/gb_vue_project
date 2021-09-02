@@ -26,6 +26,7 @@ export default new Vuex.Store({
       state.paymentsList[payload.id].value = payload.value
       state.paymentsList[payload.id].category = payload.category
       state.paymentsList[payload.id].date = payload.date
+      state.rowToChange = payload.id
     },
     removeDataFromPaymentsList(state, payload) {
       state.paymentsList.splice(payload, 1)

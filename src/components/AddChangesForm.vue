@@ -29,6 +29,7 @@ export default {
         id: this.rowID - 1,
       };
       this.$store.commit("addChangesToPaymentsList", data);
+      this.$modal.hide();
     },
   },
   computed: {

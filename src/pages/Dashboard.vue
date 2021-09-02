@@ -45,6 +45,7 @@
         </main>
       </v-col>
       <v-col>
+        <div class="app__title mb-4 mt-8">Costs by categories</div>
         <chart
           :chart-data="chartData"
           :options="chartOptions"

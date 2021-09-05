@@ -45,11 +45,10 @@
         </main>
       </v-col>
       <v-col>
-        <div class="app__title mb-4 mt-8">Costs by categories</div>
         <chart
+          ref="chart"
           :chart-data="chartData"
           :options="chartOptions"
-          chart:render
         ></chart>
       </v-col>
     </v-row>
@@ -83,14 +82,13 @@ export default {
       chartData: {},
       chartOptions: {
         responsive: true,
-        plugins: {
-          legend: {
-            position: "top",
-          },
-          title: {
-            display: true,
-            text: "Costs by categories",
-          },
+        legend: {
+          position: "right",
+        },
+        title: {
+          display: true,
+          position: "top",
+          text: "Costs by categories",
         },
       },
       outcome: [],
@@ -137,6 +135,9 @@ export default {
       };
     },
     getChartData() {
+      let categories = this.$store.state.categories.map((a) => a);
+      let colors = [];
+      let outcome = [];
       this.$store.state.categories.forEach((category) => {
         let categoryOutcome = 0;
         this.$store.state.paymentsList.forEach((item) => {
@@ -144,12 +145,13 @@ export default {
             categoryOutcome += item.value;
           }
         });
-        this.outcome.push(categoryOutcome);
-        this.chartCategories.push(category);
-        this.chartColors.push(
-          "#" + (((1 << 24) * Math.random()) | 0).toString(16)
-        );
+        outcome.push(categoryOutcome);
+        colors.push("#" + (((1 << 24) * Math.random()) | 0).toString(16));
       });
+
+      this.chartCategories = categories;
+      this.outcome = outcome;
+      this.chartColors = colors;
     },
   },
 
@@ -168,6 +170,9 @@ export default {
   mounted() {
     this.$modal.EventBus.$on("show", this.onModalOpen);
     this.$modal.EventBus.$on("hide", this.onModalClose);
+
+    this.getChartData();
+    this.fillChartData();
   },
   beforeDestroy() {
     this.$modal.EventBus.$off("show", this.onModalOpen);
@@ -186,9 +191,6 @@ export default {
     if (page) {
       this.onChangePage(page);
     }
-
-    this.getChartData();
-    this.fillChartData();
   },
 };
 </script>

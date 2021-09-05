@@ -19,7 +19,7 @@ export default new Vuex.Store({
     },
 
     setCurrentRow(state, payload) {
-      state.rowToChange += payload
+      state.rowToChange = payload
     },
 
     addChangesToPaymentsList(state, payload) {

@@ -4,7 +4,7 @@
       v-for="(item, idx) in items"
       :key="idx"
       @click="onClick(item)"
-      class="mg-6"
+      class="mg-6 context__btn"
     >
       <v-icon>{{ item.icon }}</v-icon>
       {{ item.text }}
@@ -66,5 +66,14 @@ export default {
 .contextmenu {
   position: absolute;
   background: white;
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.39);
+  border-radius: 10px;
+}
+.context__btn {
+  cursor: pointer;
+}
+.context__btn:hover {
+  background: wheat;
 }
 </style>
